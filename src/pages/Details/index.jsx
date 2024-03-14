@@ -1,11 +1,11 @@
 import { Container } from "./style"
+import { Header } from "../../components/Header"
 import { Button } from "../../components/Button"
 
 export function Details() {
   return (
     <Container>
-      <h1>Hello, world!</h1>
-      <p>Starting React studies.</p>
+      <Header />
 
       <Button title="Voltar" loading />
     </Container>
