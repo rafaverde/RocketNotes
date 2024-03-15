@@ -1,4 +1,4 @@
-import { Container } from "./style"
+import { Container } from "./styles"
 
 export function ButtonText({ title, ...rest }) {
   return (

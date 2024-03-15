@@ -1,5 +1,5 @@
 import { FaPowerOff } from "react-icons/fa6"
-import { Container, Profile, Logout } from "./style"
+import { Container, Profile, Logout } from "./styles"
 
 export function Header() {
   return (
