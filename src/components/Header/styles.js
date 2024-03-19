@@ -6,9 +6,7 @@ export const Container = styled.header`
   height: 105px;
   width: 100%;
 
-  border-bottom-width: 1px;
-  border-bottom-style: solid;
-  border-bottom-color: ${({ theme }) => theme.COLORS.BACKGROUND_700};
+  border-bottom: 1px solid ${({ theme }) => theme.COLORS.BACKGROUND_700};
 
   display: flex;
   justify-content: space-between;
@@ -50,5 +48,9 @@ export const Logout = styled.button`
   > svg {
     color: ${({ theme }) => theme.COLORS.GRAY_100};
     font-size: 36px;
+  }
+
+  > svg:hover {
+    color: ${({ theme }) => theme.COLORS.ORANGE};
   }
 `
