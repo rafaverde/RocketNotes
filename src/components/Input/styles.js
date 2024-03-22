@@ -14,17 +14,18 @@ export const Container = styled.div`
   > input {
     height: 56px;
     width: 100%;
+    padding-left: 16px;
 
     color: ${({ theme }) => theme.COLORS.WHITE};
     background: transparent;
     border: none;
 
-    &:placehoolder {
+    &:placeholder {
       color: ${({ theme }) => theme.COLORS.GRAY_300};
     }
   }
 
   > svg {
-    margin: 0 16px;
+    margin-left: 16px;
   }
 `
