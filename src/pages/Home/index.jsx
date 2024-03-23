@@ -49,7 +49,7 @@ export function Home() {
         </Section>
       </Content>
 
-      <NewNotes>
+      <NewNotes to="/new">
         <FaCirclePlus />
         <span>Criar Nota</span>
       </NewNotes>
