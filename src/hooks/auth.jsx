@@ -1,5 +1,5 @@
 // Importa o módulo de contexto e o hook de uso do contexto do react
-import { createContext, useContext, useState } from "react"
+import { createContext, useContext, useEffect, useState } from "react"
 
 // Importa conexão com o backend para enviar informações
 import { api } from "../services/api"
@@ -23,9 +23,14 @@ function AuthProvider({ children }) {
       // Separa apenas o user e password da resposta da requisição
       const { user, token } = response.data
 
+      // Armazena no navegador as informações do usuário convertendo em string
+      localStorage.setItem("@rocketnotes:user", JSON.stringify(user))
+      // Armazena no navegador as informações do token que já é em string
+      localStorage.setItem("@rocketnotes:token", token)
+
       // Adiciona o token Bearer na autorização do cabeçalho padrão
       // de todas as requisições que o usuário fizer
-      api.defaults.headers.authorization = `Bearer ${token}`
+      api.defaults.headers.common["Authorization"] = `Bearer ${token}`
 
       // Armazenamos as respostas do usuário e token no estado data
       setData({ user, token })
@@ -41,9 +46,39 @@ function AuthProvider({ children }) {
     }
   }
 
+  // Função de logout
+  function signOut() {
+    // Remove as chaves do Local Storage
+    localStorage.removeItem("@rocketnotes:user")
+    localStorage.removeItem("@rocketnotes:token")
+
+    // Limpa o estado que contém os dados de acesso
+    setData({})
+  }
+
+  // useEffect para puxar as informações de login no localStorage para o estado.
+  useEffect(() => {
+    const token = localStorage.getItem("@rocketnotes:token")
+    const user = localStorage.getItem("@rocketnotes:user")
+
+    // Verificar se user e token foram informados
+    if (user && token) {
+      // Adiciona o token Bearer na autorização do cabeçalho padrão
+      // de todas as requisições que o usuário fizer
+      api.defaults.headers.common["Authorization"] = `Bearer ${token}`
+
+      // Armazenamos as respostas do usuário e token no estado data
+      // convertendo o user novamente em objeto
+      setData({
+        token,
+        user: JSON.parse(user),
+      })
+    }
+  }, [])
+
   return (
-    // Compartilha a função singIn e os dados de usuário no provider
-    <AuthContext.Provider value={{ signIn, user: data.user }}>
+    // Compartilha a função singIn, signOut e os dados de usuário no provider
+    <AuthContext.Provider value={{ signIn, signOut, user: data.user }}>
       {children}
     </AuthContext.Provider>
   )

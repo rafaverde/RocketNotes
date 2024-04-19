@@ -1,7 +1,12 @@
+// Importa Hook de Autenticação
+import { useAuth } from "../../hooks/auth"
 import { FaPowerOff } from "react-icons/fa6"
 import { Container, Profile, Logout } from "./styles"
 
 export function Header() {
+  // Acessa a função de signOut do useAuth
+  const { signOut } = useAuth()
+
   return (
     <Container>
       <Profile to="/profile">
@@ -12,7 +17,8 @@ export function Header() {
         </div>
       </Profile>
 
-      <Logout>
+      {/* Passamos a função signOut no click do componente Logout */}
+      <Logout onClick={signOut}>
         <FaPowerOff />
       </Logout>
     </Container>
