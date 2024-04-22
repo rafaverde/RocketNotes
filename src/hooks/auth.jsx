@@ -56,6 +56,29 @@ function AuthProvider({ children }) {
     setData({})
   }
 
+  // Função de atualiação do perfil
+  async function updateProfile({ user }) {
+    try {
+      // Conecta com backend e envia os dados
+      await api.put("/users", user)
+
+      // Atualiza o localStorage com os novos dados convertendo em string
+      localStorage.setItem("@rocketnotes:user", JSON.stringify(user))
+
+      // Atualiza o estado do componente com novos dados do usuário e o token que já existe
+      setData({ user, token: data.token })
+
+      alert("Perfil atualizado com sucesso!")
+    } catch (error) {
+      // Caso haja algum erro com response
+      if (error.response) {
+        alert(error.response.data.message)
+      } else {
+        alert("Não foi possível atualizar o perfil")
+      }
+    }
+  }
+
   // useEffect para puxar as informações de login no localStorage para o estado.
   useEffect(() => {
     const token = localStorage.getItem("@rocketnotes:token")
@@ -77,8 +100,11 @@ function AuthProvider({ children }) {
   }, [])
 
   return (
-    // Compartilha a função singIn, signOut e os dados de usuário no provider
-    <AuthContext.Provider value={{ signIn, signOut, user: data.user }}>
+    // Compartilha a função singIn, signOut, updateProfile
+    // e os dados de usuário no provider
+    <AuthContext.Provider
+      value={{ signIn, signOut, updateProfile, user: data.user }}
+    >
       {children}
     </AuthContext.Provider>
   )
