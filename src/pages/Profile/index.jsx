@@ -1,4 +1,7 @@
 import { useAuth } from "../../hooks/auth"
+import { api } from "../../services/api"
+
+import avatarPlaceholder from "../../assets/avatar_placeholder.svg"
 
 import { FiArrowLeft, FiUser, FiMail, FiLock, FiCamera } from "react-icons/fi"
 import { Container, Form, Avatar } from "./style"
@@ -17,6 +20,16 @@ export function Profile() {
   const [oldPassword, setOldPassword] = useState(user.oldPassword)
   const [newPassword, setNewPassword] = useState(user.newPassword)
 
+  // Declara a URL do avatar e se não houver, coloca o placeholder
+  const avatarURL = user.avatar
+    ? `${api.defaults.baseURL}/files/${user.avatar}`
+    : avatarPlaceholder
+
+  // Estado que atualiza o avatar, caso já exista, pega o atual
+  const [avatar, setAvatar] = useState(avatarURL)
+  // Estado que capta o caminho do artquivo do novo Avatar
+  const [avatarFile, setAvatarFile] = useState(null)
+
   async function handleUpdate() {
     const user = {
       name,
@@ -25,7 +38,20 @@ export function Profile() {
       password: newPassword,
     }
 
-    await updateProfile({ user })
+    await updateProfile({ user, avatarFile })
+  }
+
+  // Lida com o clique para mudança do avatar
+  function handleChangeAvatar(event) {
+    // Pega o arquivo na primeira posição da transferência de dados
+    const file = event.target.files[0]
+
+    // Coloca no estado o arquivo que o usuário selecionar
+    setAvatarFile(file)
+
+    // Passa o caminho do avatar para o estado do avatar atual
+    const imagePreview = URL.createObjectURL(file)
+    setAvatar(imagePreview)
   }
 
   return (
@@ -38,10 +64,10 @@ export function Profile() {
 
       <Form>
         <Avatar>
-          <img src="https://github.com/rafaverde.png" alt="User Avatar" />
+          <img src={avatar} alt={user.name} />
           <label htmlFor="avatar">
             <FiCamera />
-            <input id="avatar" type="file" />
+            <input id="avatar" type="file" onChange={handleChangeAvatar} />
           </label>
         </Avatar>
         <Input

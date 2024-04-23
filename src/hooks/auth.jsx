@@ -57,8 +57,20 @@ function AuthProvider({ children }) {
   }
 
   // Função de atualiação do perfil
-  async function updateProfile({ user }) {
+  async function updateProfile({ user, avatarFile }) {
     try {
+      // Verifica se existe um arquivo para colocar no avatar
+      if (avatarFile) {
+        // Instância para armazenar a informação do arquivo
+        const fileUploadForm = new FormData()
+        // Cria formulário para envio do arquivo
+        fileUploadForm.append("avatar", avatarFile)
+
+        // Resposta com o avatar atualizado
+        const response = await api.patch("/users/avatar", fileUploadForm)
+        user.avatar = response.data.avatar
+      }
+
       // Conecta com backend e envia os dados
       await api.put("/users", user)
 
