@@ -17,6 +17,9 @@ export function New() {
   // Cria estado para armazenar o link adicionado
   const [newLink, setNewLink] = useState("")
 
+  const [tags, setTags] = useState([])
+  const [newTag, setNewTag] = useState("")
+
   // Lida com click ao adicionar novo link
   function handleAddLink() {
     // Verifica se está vazio
@@ -34,7 +37,24 @@ export function New() {
   function handleRemoveLink(deleted) {
     // Coloca no estado, uma lista filtrando o que for passado em deleted
     // gerando uma lista apenas com o que for diferente dele
-    setLinks((prevState) => prevState.filter((link) => link !== deleted))
+    setLinks((prevState) =>
+      prevState.filter((link, index) => index !== deleted)
+    )
+  }
+
+  function handleNewTag() {
+    if (!newTag) {
+      alert("Não pode ser vazio, digite uma tag")
+    } else {
+      setTags((prevState) => [...prevState, newTag])
+      setNewTag("")
+    }
+  }
+
+  function handleRemoveTag(deleted) {
+    console.log(deleted)
+    setTags((prevState) => prevState.filter((tag, index) => index !== deleted))
+    console.log(tags)
   }
 
   return (
@@ -60,7 +80,7 @@ export function New() {
                 key={String(index)}
                 value={link}
                 onClick={() => {
-                  handleRemoveLink(link)
+                  handleRemoveLink(index)
                 }}
               ></NoteItem>
             ))}
@@ -76,10 +96,23 @@ export function New() {
 
           <Section title="Marcadores">
             <div className="tags">
-              <NoteItem value="react"></NoteItem>
-              <NoteItem value="explorer"></NoteItem>
+              {tags.map((tag, index) => (
+                <NoteItem
+                  key={String(index)}
+                  value={tag}
+                  onClick={() => {
+                    handleRemoveTag(index)
+                  }}
+                ></NoteItem>
+              ))}
 
-              <NoteItem isNew placeholder="Nova Tag"></NoteItem>
+              <NoteItem
+                placeholder="Nova Tag"
+                isNew
+                value={newTag}
+                onChange={(e) => setNewTag(e.target.value)}
+                onClick={handleNewTag}
+              ></NoteItem>
             </div>
           </Section>
           <Button title="Salvar" />
