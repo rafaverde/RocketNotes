@@ -34,8 +34,6 @@ function AuthProvider({ children }) {
 
       // Armazenamos as respostas do usuário e token no estado data
       setData({ user, token })
-
-      console.log(user, token)
     } catch (error) {
       // Caso haja algum erro com response
       if (error.response) {
