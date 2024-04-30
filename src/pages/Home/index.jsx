@@ -11,13 +11,23 @@ import { Note } from "../../components/Note"
 import { api } from "../../services/api"
 
 export function Home() {
+  //Estado para a pesquisa de notas
+  const [search, setSearch] = useState("")
   // Estado para puxar as tags
   const [tags, setTags] = useState([])
   // Estado para guardar as tags selecionadas
   const [tagsSelected, setTagsSelected] = useState([])
+  // Estado para puxar as notas
+  const [notes, setNotes] = useState([])
 
   // Lida com tag quando selecionada recebendo o nome da tag como parâmetro
   function handleTagSelected(tagName) {
+    // Verifica se o filtro de tag Todos foi clicado e tira os outro filtros
+    if (tagName === "all") {
+      // Zera o array das tags selecionadas
+      return setTagsSelected([])
+    }
+
     // Verifica se a tag clicada já existe entre as selecionadas
     const alreadySelected = tagsSelected.includes(tagName)
 
@@ -25,6 +35,8 @@ export function Home() {
     if (alreadySelected) {
       // Filtra as tags que retorna uma nova lista sem a tag clicada.
       const filteredTags = tagsSelected.filter((tag) => tag !== tagName)
+      console.log(filteredTags)
+      console.log(tagsSelected.length)
       // Atualiza estado com as tags selecionadas
       setTagsSelected(filteredTags)
     } else {
@@ -33,7 +45,7 @@ export function Home() {
     }
   }
 
-  // Qunado carregar o componente Home, executa o código
+  // Quando carregar o componente Home, executa o código buscando as tags no inicio
   useEffect(() => {
     // Função para buscar as tags em nossa api.
     async function fetchTags() {
@@ -45,6 +57,18 @@ export function Home() {
 
     fetchTags()
   }, [])
+
+  // Executa busca quando tags ou search for alterado
+  useEffect(() => {
+    async function fetchNotes() {
+      const response = await api.get(
+        `/notes?title=${search}&tags=${tagsSelected}`
+      )
+      setNotes(response.data)
+    }
+
+    fetchNotes()
+  }, [tagsSelected, search])
 
   return (
     <Container>
@@ -77,20 +101,18 @@ export function Home() {
       </Menu>
 
       <Search>
-        <Input placeholder="Pesquisar pelo título" icon={FaMagnifyingGlass} />
+        <Input
+          placeholder="Pesquisar pelo título"
+          icon={FaMagnifyingGlass}
+          onChange={(e) => setSearch(e.target.value)}
+        />
       </Search>
 
       <Content>
         <Section title="Minhas notas">
-          <Note
-            data={{
-              title: "React",
-              tags: [
-                { id: "1", name: "react" },
-                { id: "2", name: "explorer" },
-              ],
-            }}
-          />
+          {notes.map((note) => (
+            <Note key={String(note.id)} data={note} />
+          ))}
         </Section>
       </Content>
 
