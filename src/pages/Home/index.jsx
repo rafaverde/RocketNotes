@@ -9,6 +9,7 @@ import { ButtonText } from "../../components/ButtonText"
 import { Input } from "../../components/Input"
 import { Note } from "../../components/Note"
 import { api } from "../../services/api"
+import { useNavigate } from "react-router-dom"
 
 export function Home() {
   //Estado para a pesquisa de notas
@@ -19,6 +20,8 @@ export function Home() {
   const [tagsSelected, setTagsSelected] = useState([])
   // Estado para puxar as notas
   const [notes, setNotes] = useState([])
+  //Instancia useNavigate
+  const navigate = useNavigate()
 
   // Lida com tag quando selecionada recebendo o nome da tag como parâmetro
   function handleTagSelected(tagName) {
@@ -43,6 +46,11 @@ export function Home() {
       // Atualizao estado, incluindo o que continha e o que foi clicado
       setTagsSelected((prevState) => [...prevState, tagName])
     }
+  }
+
+  // Lida com o clique na nota e leva para os detalhes
+  function handleDetails(id) {
+    navigate(`/details/${id}`)
   }
 
   // Quando carregar o componente Home, executa o código buscando as tags no inicio
@@ -111,7 +119,11 @@ export function Home() {
       <Content>
         <Section title="Minhas notas">
           {notes.map((note) => (
-            <Note key={String(note.id)} data={note} />
+            <Note
+              key={String(note.id)}
+              data={note}
+              onClick={() => handleDetails(note.id)}
+            />
           ))}
         </Section>
       </Content>
