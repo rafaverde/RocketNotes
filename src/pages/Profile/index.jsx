@@ -37,6 +37,10 @@ export function Profile() {
   }
 
   async function handleUpdate() {
+    if (!newPassword) {
+      return alert("Você precisa digitar uma nova senha!")
+    }
+
     const updated = {
       name,
       email,

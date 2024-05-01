@@ -74,6 +74,15 @@ export function New() {
       return alert("Título não pode ser vazio.")
     }
 
+    if (!newLink && links.length === 0) {
+      console.log(links)
+      return alert("É necessário inserir um link pelo menos.")
+    }
+
+    if (!newTag && tags.length === 0) {
+      return alert("É necessário inserir uma tag pelo menos.")
+    }
+
     if (newLink || newTag) {
       return alert(
         "Você deixou um link ou tag digitada, mas não adicionou. Limpe o campo ou clique em adicionar (+)"
