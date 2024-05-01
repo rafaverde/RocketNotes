@@ -37,8 +37,14 @@ export function Details() {
     async function fetchNote() {
       // Instancia a resposta passando a rota pelo parametro id aguarda a resposta e passa para a variável
       const response = await api.get(`/notes/${params.id}`)
-      // Atualiza estado data com as informações da nota
-      setData(response.data)
+
+      if (!response.data.id) {
+        alert("Nota não existe!")
+        navigate("/")
+      } else {
+        // Atualiza estado data com as informações da nota
+        setData(response.data)
+      }
     }
 
     fetchNote()
