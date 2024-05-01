@@ -19,7 +19,7 @@ export function Details() {
 
   // Lida com o clique de voltar
   function handleBackButton() {
-    navigate("/")
+    navigate(-1)
   }
 
   // Lida com o clique de remover nota
@@ -28,7 +28,7 @@ export function Details() {
 
     if (confirm) {
       await api.delete(`/notes/${params.id}`)
-      navigate("/")
+      navigate(-1)
     }
   }
 

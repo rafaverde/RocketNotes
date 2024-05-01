@@ -5,7 +5,7 @@ import avatarPlaceholder from "../../assets/avatar_placeholder.svg"
 
 import { FiArrowLeft, FiUser, FiMail, FiLock, FiCamera } from "react-icons/fi"
 import { Container, Form, Avatar } from "./style"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 import { Input } from "../../components/Input"
 import { Button } from "../../components/Button"
@@ -20,6 +20,8 @@ export function Profile() {
   const [oldPassword, setOldPassword] = useState(user.oldPassword)
   const [newPassword, setNewPassword] = useState(user.newPassword)
 
+  const navigate = useNavigate()
+
   // Declara a URL do avatar e se não houver, coloca o placeholder
   const avatarURL = user.avatar
     ? `${api.defaults.baseURL}/files/${user.avatar}`
@@ -30,15 +32,21 @@ export function Profile() {
   // Estado que capta o caminho do artquivo do novo Avatar
   const [avatarFile, setAvatarFile] = useState(null)
 
+  function handleBackButton() {
+    navigate(-1)
+  }
+
   async function handleUpdate() {
-    const user = {
+    const updated = {
       name,
       email,
       old_password: oldPassword,
       password: newPassword,
     }
 
-    await updateProfile({ user, avatarFile })
+    const userUpdated = Object.assign(user, updated)
+
+    await updateProfile({ user: userUpdated, avatarFile })
   }
 
   // Lida com o clique para mudança do avatar
@@ -57,9 +65,9 @@ export function Profile() {
   return (
     <Container>
       <header>
-        <Link to="/">
+        <button type="button" onClick={handleBackButton}>
           <FiArrowLeft />
-        </Link>
+        </button>
       </header>
 
       <Form>

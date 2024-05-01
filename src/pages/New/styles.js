@@ -40,7 +40,7 @@ export const Form = styled.form`
       flex: 1;
     }
 
-    a {
+    button {
       display: flex;
       align-items: center;
       font-size: 20px;

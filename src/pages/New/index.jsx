@@ -1,8 +1,7 @@
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 import { Container, Form } from "./styles"
-import { FiChevronLeft } from "react-icons/fi"
-import { Link, useNavigate } from "react-router-dom"
 
 import { Header } from "../../components/Header"
 import { Input } from "../../components/Input"
@@ -10,6 +9,7 @@ import { Textarea } from "../../components/Textarea"
 import { Section } from "../../components/Section"
 import { NoteItem } from "../../components/NoteItem"
 import { Button } from "../../components/Button"
+import { ButtonText } from "../../components/ButtonText"
 
 import { api } from "../../services/api"
 
@@ -27,6 +27,10 @@ export function New() {
 
   // Instancia o useNavigate
   const navigate = useNavigate()
+
+  function handleBackButton() {
+    navigate(-1)
+  }
 
   // Lida com click ao adicionar novo link
   function handleAddLink() {
@@ -93,10 +97,7 @@ export function New() {
           <header>
             <h1>Criar nota</h1>
 
-            <Link to="/">
-              <FiChevronLeft />
-              Voltar
-            </Link>
+            <ButtonText title="< Voltar" onClick={handleBackButton} />
           </header>
           <Input
             placeholder="Título"
