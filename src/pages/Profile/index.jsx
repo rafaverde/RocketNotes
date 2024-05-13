@@ -5,7 +5,7 @@ import avatarPlaceholder from "../../assets/avatar_placeholder.svg"
 
 import { FiArrowLeft, FiUser, FiMail, FiLock, FiCamera } from "react-icons/fi"
 import { Container, Form, Avatar } from "./style"
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
 import { Input } from "../../components/Input"
 import { Button } from "../../components/Button"
